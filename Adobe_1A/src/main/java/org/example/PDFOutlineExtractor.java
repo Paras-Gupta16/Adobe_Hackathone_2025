@@ -9,7 +9,6 @@ import org.apache.pdfbox.pdmodel.PDDocumentInformation;
 import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.pdfbox.text.TextPosition;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -18,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class PDFOutlineExtractor extends PDFTextStripper {
@@ -104,8 +102,8 @@ public class PDFOutlineExtractor extends PDFTextStripper {
     public List<OutlineData> extractHeadings(PDDocument document) throws IOException {
         textLines.clear();
         super.document = document;
-        super.startPage(document.getPages().get(0)); // Process first page for initial font info
-        super.getText(document); // Process all pages
+        super.startPage(document.getPages().get(0));
+        super.getText(document);
 
         textLines.sort(Comparator
                 .comparingInt((TextLine line) -> line.page)
@@ -234,8 +232,6 @@ public class PDFOutlineExtractor extends PDFTextStripper {
 
                     PDFOutlineExtractor extractor = new PDFOutlineExtractor();
 
-                    // Call getText on the extractor to populate textLines before extracting title/headings
-                    // This is important because extractTitle and extractHeadings rely on the populated textLines
                     extractor.getText(document);
 
                     String title = extractor.extractTitle(document);
@@ -267,7 +263,7 @@ public class PDFOutlineExtractor extends PDFTextStripper {
         System.out.println("PDF Outline Extractor finished.");
     }
 
-    // Data models for JSON output
+
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class OutlineData {
         public String level;

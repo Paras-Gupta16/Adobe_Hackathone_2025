@@ -16,9 +16,6 @@ import java.util.stream.Collectors;
 
 public class PersonaExtractor {
 
-//    private static final String INPUT_DIR = "/app/input";
-//    private static final String OUTPUT_DIR = "/app/output";
-
     private static final String INPUT_DIR = System.getenv("PDF_INPUT_DIR") != null ?
             System.getenv("PDF_INPUT_DIR") : "D:/Adobe_Hackathone/Adobe_1B/input";
 
@@ -119,8 +116,6 @@ public class PersonaExtractor {
         System.out.println("Round 1B output written to: " + outputFile.getFileName());
     }
 
-    // ---------- Inner Classes ----------
-
     public static class Metadata {
         public List<String> documents;
         public String persona;
@@ -160,8 +155,6 @@ public class PersonaExtractor {
             this.page = page;
         }
     }
-
-    // ---------- PDF Extraction Logic ----------
 
     private static List<OutlineData> extractHeadings(PDDocument document) throws IOException {
         List<TextLine> textLines = new ArrayList<>();
