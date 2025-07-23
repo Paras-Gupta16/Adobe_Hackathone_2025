@@ -1,0 +1,20 @@
+{
+  "title" : "Consensus Mechanisms: PoW vs PoS",
+  "outline" : [ {
+    "level" : "H2",
+    "text" : "Consensus Mechanisms: PoW vs PoS",
+    "page" : 1
+  }, {
+    "level" : "H3",
+    "text" : "Introduction",
+    "page" : 1
+  }, {
+    "level" : "H3",
+    "text" : "Applications",
+    "page" : 2
+  }, {
+    "level" : "H3",
+    "text" : "Core Concepts",
+    "page" : 2
+  } ]
+}

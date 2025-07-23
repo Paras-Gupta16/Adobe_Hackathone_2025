@@ -1,0 +1,24 @@
+{
+  "title" : "Understanding Blockchain Basics",
+  "outline" : [ {
+    "level" : "H2",
+    "text" : "Understanding Blockchain Basics",
+    "page" : 1
+  }, {
+    "level" : "H3",
+    "text" : "Introduction",
+    "page" : 1
+  }, {
+    "level" : "H3",
+    "text" : "Security Aspects",
+    "page" : 1
+  }, {
+    "level" : "H3",
+    "text" : "Core Concepts",
+    "page" : 3
+  }, {
+    "level" : "H3",
+    "text" : "Applications",
+    "page" : 3
+  } ]
+}

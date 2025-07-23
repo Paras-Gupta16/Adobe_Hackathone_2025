@@ -1,0 +1,24 @@
+{
+  "title" : "Smart Contracts and Their Applications",
+  "outline" : [ {
+    "level" : "H2",
+    "text" : "Smart Contracts and Their Applications",
+    "page" : 1
+  }, {
+    "level" : "H3",
+    "text" : "Applications",
+    "page" : 1
+  }, {
+    "level" : "H3",
+    "text" : "Core Concepts",
+    "page" : 1
+  }, {
+    "level" : "H3",
+    "text" : "Security Aspects",
+    "page" : 3
+  }, {
+    "level" : "H3",
+    "text" : "Conclusion",
+    "page" : 4
+  } ]
+}

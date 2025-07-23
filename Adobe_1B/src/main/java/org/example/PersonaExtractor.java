@@ -20,10 +20,10 @@ public class PersonaExtractor {
 //    private static final String OUTPUT_DIR = "/app/output";
 
     private static final String INPUT_DIR = System.getenv("PDF_INPUT_DIR") != null ?
-            System.getenv("PDF_INPUT_DIR") : "D:/Adobe_1B/input";
+            System.getenv("PDF_INPUT_DIR") : "D:/Adobe_Hackathone/Adobe_1B/input";
 
     private static final String OUTPUT_DIR = System.getenv("PDF_OUTPUT_DIR") != null ?
-            System.getenv("PDF_OUTPUT_DIR") : "D:/Adobe_1B/output";
+            System.getenv("PDF_OUTPUT_DIR") : "D:/Adobe_Hackathone/Adobe_1B/output";
     private final List<String> taskKeywords;
 
     public PersonaExtractor(String jobToBeDone) {

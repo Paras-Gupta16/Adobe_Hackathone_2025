@@ -28,7 +28,6 @@ public class PDFOutlineExtractor extends PDFTextStripper {
 
     private static final String OUTPUT_DIR = System.getenv("PDF_OUTPUT_DIR") != null ?
             System.getenv("PDF_OUTPUT_DIR") : "D:/Adobe_Hackathone/Adobe_1A/output";
-
     private final List<TextLine> textLines = new ArrayList<>();
     private int currentPageNum;
 
@@ -201,8 +200,6 @@ public class PDFOutlineExtractor extends PDFTextStripper {
             return;
         }
 
-        List<DocumentOutline> allResults = new ArrayList<>();
-
         try {
             List<Path> pdfFiles = Files.walk(inputPath)
                                        .filter(Files::isRegularFile)
@@ -221,6 +218,9 @@ public class PDFOutlineExtractor extends PDFTextStripper {
 
             for (Path pdfFile : pdfFiles) {
                 String fileName = pdfFile.getFileName().toString();
+                String outputFileName = fileName.substring(0, fileName.lastIndexOf(".")) + ".json";
+                Path outputFile = outputPath.resolve(outputFileName);
+
                 System.out.println("Processing: " + fileName);
 
                 PDDocument document = null;
@@ -233,15 +233,18 @@ public class PDFOutlineExtractor extends PDFTextStripper {
                     }
 
                     PDFOutlineExtractor extractor = new PDFOutlineExtractor();
+
+                    // Call getText on the extractor to populate textLines before extracting title/headings
+                    // This is important because extractTitle and extractHeadings rely on the populated textLines
                     extractor.getText(document);
 
                     String title = extractor.extractTitle(document);
                     List<OutlineData> headings = extractor.extractHeadings(document);
 
                     DocumentOutline docOutline = new DocumentOutline(title, headings);
-                    allResults.add(docOutline);
+                    mapper.writeValue(outputFile.toFile(), docOutline);
 
-                    System.out.println("Successfully processed " + fileName);
+                    System.out.println("Successfully processed " + fileName + " -> " + outputFileName);
 
                 } catch (IOException e) {
                     System.err.println("Error processing " + fileName + ": " + e.getMessage());
@@ -256,12 +259,6 @@ public class PDFOutlineExtractor extends PDFTextStripper {
                     }
                 }
             }
-
-            Path mergedOutput = outputPath.resolve("merged_output.json");
-            mapper.writeValue(mergedOutput.toFile(), allResults);
-
-            System.out.println("Merged JSON written to: " + mergedOutput.getFileName());
-
         } catch (IOException e) {
             System.err.println("Error listing PDF files or general I/O error: " + e.getMessage());
             e.printStackTrace();
@@ -269,7 +266,6 @@ public class PDFOutlineExtractor extends PDFTextStripper {
 
         System.out.println("PDF Outline Extractor finished.");
     }
-
 
     // Data models for JSON output
     @JsonInclude(JsonInclude.Include.NON_NULL)
