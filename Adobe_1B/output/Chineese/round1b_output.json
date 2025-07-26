@@ -1,0 +1,109 @@
+{
+  "metadata" : {
+    "documents" : [ "formatted_sample_1 zh-Hans.pdf", "formatted_sample_2 zh-Hans.pdf", "formatted_sample_3 zh-Hans.pdf", "formatted_sample_4 zh-Hans.pdf", "formatted_sample_5 zh-Hans.pdf" ],
+    "persona" : "加密货币挖矿详解",
+    "job_to_be_done" : "简介",
+    "processing_timestamp" : "2025-07-26T11:41:37.4266114+05:30"
+  },
+  "extracted_sections" : [ {
+    "document" : "formatted_sample_1 zh-Hans.pdf",
+    "page_number" : 1,
+    "section_title" : "加密货币挖矿详解",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_1 zh-Hans.pdf",
+    "page_number" : 1,
+    "section_title" : "简介",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_1 zh-Hans.pdf",
+    "page_number" : 1,
+    "section_title" : "技术深挖",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_1 zh-Hans.pdf",
+    "page_number" : 3,
+    "section_title" : "使用案例",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_2 zh-Hans.pdf",
+    "page_number" : 1,
+    "section_title" : "区块链与传统数据库",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_2 zh-Hans.pdf",
+    "page_number" : 1,
+    "section_title" : "简介",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_2 zh-Hans.pdf",
+    "page_number" : 1,
+    "section_title" : "技术深挖",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_2 zh-Hans.pdf",
+    "page_number" : 3,
+    "section_title" : "使用案例",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_3 zh-Hans.pdf",
+    "page_number" : 1,
+    "section_title" : "数字钱包的未来",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_3 zh-Hans.pdf",
+    "page_number" : 1,
+    "section_title" : "简介",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_3 zh-Hans.pdf",
+    "page_number" : 1,
+    "section_title" : "技术深挖",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_3 zh-Hans.pdf",
+    "page_number" : 3,
+    "section_title" : "使用案例",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_4 zh-Hans.pdf",
+    "page_number" : 1,
+    "section_title" : "了解公钥和私钥",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_4 zh-Hans.pdf",
+    "page_number" : 1,
+    "section_title" : "简介",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_4 zh-Hans.pdf",
+    "page_number" : 1,
+    "section_title" : "技术深挖",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_4 zh-Hans.pdf",
+    "page_number" : 3,
+    "section_title" : "使用案例",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_5 zh-Hans.pdf",
+    "page_number" : 1,
+    "section_title" : "区块链中的加密哈希函数",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_5 zh-Hans.pdf",
+    "page_number" : 1,
+    "section_title" : "简介",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_5 zh-Hans.pdf",
+    "page_number" : 1,
+    "section_title" : "技术深挖",
+    "importance_rank" : 1
+  }, {
+    "document" : "formatted_sample_5 zh-Hans.pdf",
+    "page_number" : 3,
+    "section_title" : "使用案例",
+    "importance_rank" : 1
+  } ]
+}

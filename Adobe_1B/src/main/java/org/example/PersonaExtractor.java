@@ -21,6 +21,75 @@ public class PersonaExtractor {
 
     private static final String OUTPUT_DIR = System.getenv("PDF_OUTPUT_DIR") != null ?
             System.getenv("PDF_OUTPUT_DIR") : "D:/Adobe_Hackathone/Adobe_1B/output";
+
+    public static void main(String[] args) throws IOException {
+
+        Path inputPath = Paths.get(INPUT_DIR);
+        Path outputPath = Paths.get(OUTPUT_DIR);
+
+        if (!Files.exists(outputPath)) {
+            Files.createDirectories(outputPath);
+        }
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+        try (DirectoryStream<Path> languageDirs = Files.newDirectoryStream(inputPath)) {
+            for (Path languageDir : languageDirs) {
+                if (!Files.isDirectory(languageDir)) continue;
+
+                String language = languageDir.getFileName().toString();
+                List<RankedSection> allRankedSections = new ArrayList<>();
+                List<String> processedDocuments = new ArrayList<>();
+
+                List<Path> pdfFiles = Files.walk(languageDir)
+                                           .filter(Files::isRegularFile)
+                                           .filter(p -> p.toString().toLowerCase().endsWith(".pdf"))
+                                           .collect(Collectors.toList());
+
+                String persona = "Unknown Persona";
+                String jobToBeDone = "Unknown Job";
+
+                if (!pdfFiles.isEmpty()) {
+                    Map<String, String> extractedInfo = extractPersonaAndGoal(pdfFiles.get(0));
+                    persona = extractedInfo.get("persona");
+                    jobToBeDone = extractedInfo.get("jobToBeDone");
+                }
+
+                PersonaExtractor extractor = new PersonaExtractor(jobToBeDone);
+
+                for (Path pdfFile : pdfFiles) {
+                    System.out.println("Processing: " + pdfFile.getFileName());
+                    processedDocuments.add(pdfFile.getFileName().toString());
+
+                    PDDocument document = null;
+                    try {
+                        document = PDDocument.load(pdfFile.toFile());
+                        List<OutlineData> headings = extractHeadings(document);
+                        List<RankedSection> rankedSections = extractor.rankSections(headings, pdfFile.getFileName().toString());
+                        allRankedSections.addAll(rankedSections);
+                    } finally {
+                        if (document != null) {
+                            document.close();
+                        }
+                    }
+                }
+
+                Metadata metadata = new Metadata(processedDocuments, persona, jobToBeDone);
+                Map<String, Object> outputJson = new HashMap<>();
+                outputJson.put("metadata", metadata);
+                outputJson.put("extracted_sections", allRankedSections);
+
+                Path langOutputDir = outputPath.resolve(language);
+                Files.createDirectories(langOutputDir);
+                Path outputFile = langOutputDir.resolve("round1b_output.json");
+                mapper.writeValue(outputFile.toFile(), outputJson);
+
+                System.out.println("Written output to: " + outputFile);
+            }
+        }
+    }
+
     private final List<String> taskKeywords;
 
     public PersonaExtractor(String jobToBeDone) {
@@ -44,7 +113,6 @@ public class PersonaExtractor {
 
     private List<RankedSection> rankSections(List<OutlineData> sections, String documentName) {
         List<RankedSection> rankedSections = new ArrayList<>();
-
         for (OutlineData section : sections) {
             int relevanceScore = scoreSection(section.text);
             if (relevanceScore > 0) {
@@ -56,64 +124,8 @@ public class PersonaExtractor {
                 ));
             }
         }
-
         rankedSections.sort(Comparator.comparingInt(s -> -s.importance_rank));
         return rankedSections;
-    }
-
-    public static void main(String[] args) throws IOException {
-        String persona = "PhD Researcher in Computational Biology";
-        String jobToBeDone = "Prepare a comprehensive literature review focusing on methodologies, datasets, and performance benchmarks";
-
-        PersonaExtractor extractor = new PersonaExtractor(jobToBeDone);
-
-        List<RankedSection> allRankedSections = new ArrayList<>();
-        List<String> processedDocuments = new ArrayList<>();
-
-        Path inputPath = Paths.get(INPUT_DIR);
-        Path outputPath = Paths.get(OUTPUT_DIR);
-
-        if (!Files.exists(outputPath)) {
-            Files.createDirectories(outputPath);
-        }
-
-        List<Path> pdfFiles = Files.walk(inputPath)
-                                   .filter(Files::isRegularFile)
-                                   .filter(p -> p.toString().toLowerCase().endsWith(".pdf"))
-                                   .collect(Collectors.toList());
-
-        for (Path pdfFile : pdfFiles) {
-            System.out.println("Processing: " + pdfFile.getFileName());
-
-            processedDocuments.add(pdfFile.getFileName().toString());
-
-            PDDocument document = null;
-            try {
-                document = PDDocument.load(pdfFile.toFile());
-                List<OutlineData> headings = extractHeadings(document);
-                List<RankedSection> rankedSections = extractor.rankSections(headings, pdfFile.getFileName().toString());
-                allRankedSections.addAll(rankedSections);
-
-            } finally {
-                if (document != null) {
-                    document.close();
-                }
-            }
-        }
-
-        Metadata metadata = new Metadata(processedDocuments, persona, jobToBeDone);
-
-        Map<String, Object> outputJson = new HashMap<>();
-        outputJson.put("metadata", metadata);
-        outputJson.put("extracted_sections", allRankedSections);
-
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.enable(SerializationFeature.INDENT_OUTPUT);
-
-        Path outputFile = outputPath.resolve("round1b_output.json");
-        mapper.writeValue(outputFile.toFile(), outputJson);
-
-        System.out.println("Round 1B output written to: " + outputFile.getFileName());
     }
 
     public static class Metadata {
@@ -189,7 +201,6 @@ public class PersonaExtractor {
                 .thenComparingDouble(line -> line.y));
 
         float avgFontSize = calculateAverageFontSize(textLines);
-
         float h1Min = avgFontSize * 1.6f;
         float h2Min = avgFontSize * 1.3f;
         float h3Min = avgFontSize * 1.1f;
@@ -236,5 +247,35 @@ public class PersonaExtractor {
             this.isBold = isBold;
             this.page = page;
         }
+    }
+
+    private static Map<String, String> extractPersonaAndGoal(Path pdfPath) throws IOException {
+        PDDocument document = PDDocument.load(pdfPath.toFile());
+        PDFTextStripper stripper = new PDFTextStripper();
+        stripper.setEndPage(1);
+        String text = stripper.getText(document);
+        document.close();
+
+        String persona = "Unknown Persona";
+        String goal = "Unknown Job";
+
+        // Split into sentences or lines
+        String[] lines = text.split("\\r?\\n");
+        List<String> validLines = Arrays.stream(lines)
+                                        .map(String::trim)
+                                        .filter(line -> !line.isEmpty())
+                                        .collect(Collectors.toList());
+
+        if (validLines.size() >= 1) {
+            persona = validLines.get(0);
+        }
+        if (validLines.size() >= 2) {
+            goal = validLines.get(1);
+        }
+
+        Map<String, String> result = new HashMap<>();
+        result.put("persona", persona);
+        result.put("jobToBeDone", goal);
+        return result;
     }
 }
