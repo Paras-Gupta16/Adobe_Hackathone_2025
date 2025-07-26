@@ -21,8 +21,11 @@ import java.util.stream.Collectors;
 
 public class PDFOutlineExtractor extends PDFTextStripper {
 
-    private static final String INPUT_DIR = System.getenv("PDF_INPUT_DIR") != null ?
-            System.getenv("PDF_INPUT_DIR") : "D:/Adobe_Hackathone/Adobe_1A/input";
+    private static final String INPUT_DIR = System.getenv("PDF_INPUT_DIR") != null
+            ? System.getenv("PDF_INPUT_DIR")
+            : (Files.exists(Paths.get("D:/Adobe_Hackathone/Adobe_1A/input"))
+            ? "D:/Adobe_Hackathone/Adobe_1A/input"
+            : "D:/Adobe_Hackathone/Adobe_1A/PDF_Folder_Round1A");
 
     private static final String OUTPUT_DIR = System.getenv("PDF_OUTPUT_DIR") != null ?
             System.getenv("PDF_OUTPUT_DIR") : "D:/Adobe_Hackathone/Adobe_1A/output";

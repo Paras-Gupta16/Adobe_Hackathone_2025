@@ -16,8 +16,11 @@ import java.util.stream.Collectors;
 
 public class PersonaExtractor {
 
-    private static final String INPUT_DIR = System.getenv("PDF_INPUT_DIR") != null ?
-            System.getenv("PDF_INPUT_DIR") : "D:/Adobe_Hackathone/Adobe_1B/input";
+    private static final String INPUT_DIR = System.getenv("PDF_INPUT_DIR") != null
+            ? System.getenv("PDF_INPUT_DIR")
+            : (Files.exists(Paths.get("D:/Adobe_Hackathone/Adobe_1B/input"))
+            ? "D:/Adobe_Hackathone/Adobe_1B/input"
+            : "D:/Adobe_Hackathone/Adobe_1B/PDF_Folder_Round1B");
 
     private static final String OUTPUT_DIR = System.getenv("PDF_OUTPUT_DIR") != null ?
             System.getenv("PDF_OUTPUT_DIR") : "D:/Adobe_Hackathone/Adobe_1B/output";
